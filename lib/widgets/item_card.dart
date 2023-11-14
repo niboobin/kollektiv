@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kollektiv/screens/shoplist_form.dart';
+import 'package:kollektiv/screens/item_form.dart';
 
 class ShopItem {
   final String name;

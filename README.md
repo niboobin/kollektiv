@@ -201,3 +201,126 @@ final List<ShopItem> items = [
     ];
 ```
 
+# Assignment 8
+
+## Explain the difference between `Navigator.push()` and `Navigator.pushReplacement()`, accompanied by examples of the correct usage of both methods!
+
+`Navigator.push()` is used to push a new route onto the navigator's stack, adding it on top of the existing routes. `Navigator.pushReplacement()` is used to push a new route onto the navigator's stack while replacing the current route with the new one.
+
+## Explain each layout widget in Flutter and their respective usage contexts!
+
+- `Align`
+A widget that aligns its child within itself and optionally sizes itself based on the child's size.
+
+- `AspectRatio`
+A widget that attempts to size the child to a specific aspect ratio.
+
+- `Baseline`
+Container that positions its child according to the child's baseline.
+
+- `Center`
+Alignment block that centers its child within itself.
+
+- `ConstrainedBox`
+A widget that imposes additional constraints on its child.
+
+- `Container`
+A convenience widget that combines common painting, positioning, and sizing widgets.
+
+- `CustomSingleChildLayout`
+A widget that defers the layout of its single child to a delegate.
+
+- `Expanded`
+A widget that expands a child of a Row, Column, or Flex.
+
+- `FittedBox`
+Scales and positions its child within itself according to fit.
+FractionallySizedBox
+A widget that sizes its child to a fraction of the total available space. For more details about the layout algorithm, see RenderFractionallySizedOverflowBox.
+
+- `IntrinsicHeight`
+A widget that sizes its child to the child's intrinsic height.
+
+- `IntrinsicWidth`
+A widget that sizes its child to the child's intrinsic width.
+
+- `LimitedBox`
+A box that limits its size only when it's unconstrained.
+
+- `Offstage`
+A widget that lays the child out as if it was in the tree, but without painting anything, without making the child available for hit...
+
+- `OverflowBox`
+A widget that imposes different constraints on its child than it gets from its parent, possibly allowing the child to overflow the parent.
+
+- `Padding`
+A widget that insets its child by the given padding.
+
+- `SizedBox`
+A box with a specified size. If given a child, this widget forces its child to have a specific width and/or height 
+
+- `SizedOverflowBox`
+A widget that is a specific size but passes its original constraints through to its child, which will probably overflow.
+
+- `Transform`
+A widget that applies a transformation before painting its child.
+
+- `Column`
+Layout a list of child widgets in the vertical direction.
+
+- `CustomMultiChildLayout`
+A widget that uses a delegate to size and position multiple children.
+
+- `Flow`
+A widget that implements the flow layout algorithm.
+
+- `GridView`
+A grid list consists of a repeated pattern of cells arrayed in a vertical and horizontal layout. The GridView widget implements this component.
+
+- `IndexedStack`
+A Stack that shows a single child from a list of children.
+
+- `LayoutBuilder`
+Builds a widget tree that can depend on the parent widget's size.
+
+- `ListBody`
+A widget that arranges its children sequentially along a given axis, forcing them to the dimension of the parent in the other axis.
+
+- `ListView`
+A scrollable, linear list of widgets. ListView is the most commonly used scrolling widget. It displays its children one after another in the scroll direction....
+
+- `Row`
+Layout a list of child widgets in the horizontal direction.
+
+- `Stack`
+This class is useful if you want to overlap several children in a simple way, for example having some text and an image, overlaid with...
+
+- `Table`
+Displays child widgets in rows and columns.
+
+- `Wrap`
+A widget that displays its children in multiple horizontal or vertical runs.
+
+
+## List the form input elements you used in this assignment and explain why you used these input elements!
+
+`TextFormField` is a Flutter widget that combines the functionalities of a `TextField` with a Form field. It's part of the Flutter framework's material library, and it's commonly used for collecting text-based input from the user. `TextFormField`simplifies the process of managing and validating user input, especially within a Form widget.
+
+## How is clean architecture implemented in a Flutter application?
+
+Clean Architecture is a software design philosophy that promotes separation of concerns and independence of frameworks. It is not tied to any specific programming language or framework, but its principles can be applied to Flutter as well. Implementing Clean Architecture in a Flutter application involves organizing your codebase into distinct layers with well-defined responsibilities.
+
+## Step by step explanation
+
+1. Create a page for adding a new item
+
+Create a new file called `item_form.dart` in the `lib` directory and add the `Scaffold` widget replacing the `Placeholder` widget. Create a new variable named `_formKey` and add it to the `key` attribute of the `Form` widget. Create a `TextFormField` widget wrapped in `Padding` as one of the children of the `Column`. Then, add the `crossAxisAlignment` attribute to control the alignment of the Column's children. Create a button as the next child of the `Column`. Wrap the button with Padding and Align.
+
+2. Create a drawer
+
+Create a new file called `left_drawer.dart`. Using the `Drawer` widget, create a drawer `ListView` that has `ListTile` for routing to `MyHomePage()` and `ShopFormPage()`.
+
+3. Edit the home page
+
+Create a new file called `item_card.dart`. For each card, we add a special condition if `item.name == Add Item` it will redirect the user to the add item page. in `menu.dart` add `LeftDrawer` widget in the scaffold widget.
+

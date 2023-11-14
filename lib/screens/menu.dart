@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kollektiv/widgets/left_drawer.dart';
-import 'package:kollektiv/widgets/shop_card.dart';
+import 'package:kollektiv/widgets/item_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
