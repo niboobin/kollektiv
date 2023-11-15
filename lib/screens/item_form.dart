@@ -13,6 +13,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
   String _name = "";
   int _price = 0;
   String _description = "";
+  int _amount = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +105,32 @@ class _ShopFormPageState extends State<ShopFormPage> {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Amount",
+                      labelText: "Amount",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _amount = int.parse(value!);
+                      });
+                    },
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "Amount cannot be empty!";
+                      }
+                      if (int.tryParse(value) == null) {
+                        return "Amount must be a number!";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -128,6 +155,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                                       Text('Name: $_name'),
                                       Text('Price: $_price'),
                                       Text('Description: $_description'),
+                                      Text('Amount: $_amount'),
                                     ],
                                   ),
                                 ),
