@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kollektiv/screens/menu.dart';
 import 'package:kollektiv/screens/item_form.dart';
+import 'package:kollektiv/screens/list_product.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -62,6 +63,29 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.remove_red_eye),
+            title: const Text('View Item'),
+            // redirect to ShopFormPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShopFormPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_basket),
+            title: const Text('Product List'),
+            onTap: () {
+              // Route menu to product page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductPage()),
+              );
+            },
+          )
         ],
       ),
     );
