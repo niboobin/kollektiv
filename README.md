@@ -1,3 +1,5 @@
+<details>
+<summary> Assignment 7 </summary>
 
 # Assignment 7
 ## Muhammad Obin Mandalika - 2206046771
@@ -200,6 +202,10 @@ final List<ShopItem> items = [
     ShopItem("Logout", Icons.logout, Colors.yellow),
     ];
 ```
+</details>
+
+<details>
+<summary> Assignment 8 </summary>
 
 # Assignment 8
 
@@ -324,3 +330,404 @@ Create a new file called `left_drawer.dart`. Using the `Drawer` widget, create a
 
 Create a new file called `item_card.dart`. For each card, we add a special condition if `item.name == Add Item` it will redirect the user to the add item page. in `menu.dart` add `LeftDrawer` widget in the scaffold widget.
 
+</details>
+
+<details>
+
+<summary> Assignment 9 </summary>
+
+# Assignment 9
+
+## Can we retrieve JSON data without creating a model first? If yes, is it better than creating a model before retrieving JSON data?
+
+For basic JSON data retrieval and manipulation tasks, you don't necessarily need to create a model. Using programming language features or libraries for working with JSON may be sufficient. 
+
+
+## Explain the function of CookieRequest and explain why a CookieRequest instance needs to be shared with all components in a Flutter application.
+
+CookieRequest is a class that represents a request for a cookie. It is used to retrieve a cookie from the server. A CookieRequest instance needs to be shared with all components in a Flutter application because it is used to retrieve a cookie from the server.
+
+##  Explain the mechanism of fetching data from JSON until it can be displayed on Flutter.
+
+To fetch and display JSON data in a Flutter application, start by making an HTTP request using the http package to a server. Parse the received JSON data with the dart:convert library, and model the data using Dart classes that represent the JSON structure. Deserialize the JSON into Dart objects, then utilize Flutter widgets to present the data in the user interface. Manage the widget's state to handle loading and error states, employing tools like FutureBuilder for asynchronous operations. This process ensures a structured flow from data retrieval to UI rendering, allowing for efficient integration of JSON data into a Flutter app.
+
+
+
+## Explain the authentication mechanism from entering account data on Flutter to Django authentication completion and the display of menus on Flutter.
+
+## Widgets used in this assignment and explain their respective functions.
+
+- FutureBuilder widget is used to build a widget based on the state of a Future. It takes a future parameter which is of type Future. It has a builder parameter which is of type AsyncWidgetBuilder. It is used to build a widget based on the state of a Future.
+
+- ListView widget is used to display its children in a scrollable list layout. It takes a children parameter which is of type List. It has multiple children which are displayed in a scrollable list layout. It is used to display its children in a scrollable list layout.
+
+- GestureDetector widget is used to detect gestures on its child widget. It takes a child parameter which is of type Widget. It has a single child which is used to detect gestures. It is used to detect gestures on its child widget.
+
+- TextFormField widget is used to create a text field. It takes a controller parameter which is of type TextEditingController. It is used to create a text field.
+
+- ElevatedButton widget is used to create a button. It takes a child parameter which is of type Widget. It is used to create a button.
+
+- Container widget is used to contain a child widget with some specific styling properties. It takes a child parameter which is of type Widget. It has a single child which is contained within the container. It is used to contain a child widget with some specific styling properties.
+
+## Step by step explanation
+
+Update the Django project by putting `django-cors-headers` into `requirements.txt`. Add corsheaders to INSTALLED_APPS and `corsheaders.middleware.CorsMiddleware` to MIDDLEWARE in `settings.py`. We also add
+
+```
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+```
+
+In `settings.py`, we add `provider` and `pbp_django_auth` packages in order to create a login page. In the django app, we create a new app called `authentication` and create the routing for that app. In `views.py` in `authentication`, we add :
+
+```
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Successful login status.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login successful!"
+                # Add other data if you want to send data to Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login failed, account disabled."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login failed, check email or password again."
+        }, status=401)
+```
+
+Create a new file called `login.dart` inside `screens` and add :
+
+```
+import 'package:kollektiv/screens/menu.dart';
+import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+    runApp(const LoginApp());
+}
+
+class LoginApp extends StatelessWidget {
+const LoginApp({super.key});
+
+@override
+Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Login',
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+    ),
+    home: const LoginPage(),
+    );
+    }
+}
+
+class LoginPage extends StatefulWidget {
+    const LoginPage({super.key});
+
+    @override
+    _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+    final TextEditingController _usernameController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+
+    @override
+    Widget build(BuildContext context) {
+        final request = context.watch<CookieRequest>();
+        return Scaffold(
+            appBar: AppBar(
+                title: const Text('Login'),
+            ),
+            body: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        TextField(
+                            controller: _usernameController,
+                            decoration: const InputDecoration(
+                                labelText: 'Username',
+                            ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        TextField(
+                            controller: _passwordController,
+                            decoration: const InputDecoration(
+                                labelText: 'Password',
+                            ),
+                            obscureText: true,
+                        ),
+                        const SizedBox(height: 24.0),
+                        ElevatedButton(
+                            onPressed: () async {
+                                String username = _usernameController.text;
+                                String password = _passwordController.text;
+
+                                // Check credentials
+                                // TODO: Change the URL and don't forget to add a trailing slash (/) at the end of the URL!
+                                // To connect the Android emulator to Django on localhost,
+                                // use the URL http://10.0.2.2/
+                                final response = await request.login("http://127.0.0.1:8000/auth/login/", {
+                                'username': username,
+                                'password': password,
+                                });
+
+                                if (request.loggedIn) {
+                                    String message = response['message'];
+                                    String uname = response['username'];
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(
+                                            SnackBar(content: Text("$message Welcome, $uname.")));
+                                    } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                            title: const Text('Login Failed'),
+                                            content:
+                                                Text(response['message']),
+                                            actions: [
+                                                TextButton(
+                                                    child: const Text('OK'),
+                                                    onPressed: () {
+                                                        Navigator.pop(context);
+                                                    },
+                                                ),
+                                            ],
+                                        ),
+                                    );
+                                }
+                            },
+                            child: const Text('Login'),
+                        ),
+                    ],
+                ),
+            ),
+        );
+    }
+}
+```
+
+Modify the `MyApp` class in `main.dart` in order to integrate the auth system with the flutter project.
+
+```
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider(
+      create: (_) {
+        CookieRequest request = CookieRequest();
+        return request;
+      },
+      child: MaterialApp(
+          title: 'Flutter App',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+            useMaterial3: true,
+          ),
+          home: LoginPage()),
+    );
+  }
+}
+```
+
+Create a new file called `product.dart` inside `models` and add :
+
+```
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+import 'dart:convert';
+
+List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Product {
+    String model;
+    int pk;
+    Fields fields;
+
+    Product({
+        required this.model,
+        required this.pk,
+        required this.fields,
+    });
+
+    factory Product.fromJson(Map<String, dynamic> json) => Product(
+        model: json["model"],
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "model": model,
+        "pk": pk,
+        "fields": fields.toJson(),
+    };
+}
+
+class Fields {
+    int user;
+    String name;
+    int amount;
+    DateTime dateAdded;
+    int price;
+    String description;
+
+    Fields({
+        required this.user,
+        required this.name,
+        required this.amount,
+        required this.dateAdded,
+        required this.price,
+        required this.description,
+    });
+
+    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
+        user: json["user"],
+        name: json["name"],
+        amount: json["amount"],
+        dateAdded: DateTime.parse(json["date_added"]),
+        price: json["price"],
+        description: json["description"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "user": user,
+        "name": name,
+        "amount": amount,
+        "date_added": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
+        "price": price,
+        "description": description,
+    };
+}
+
+```
+
+Create a new file called `list_product.dart` in `screens` and add :
+
+```
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:kollektiv/models/product.dart';
+import 'package:kollektiv/widgets/left_drawer.dart';
+
+class ProductPage extends StatefulWidget {
+  const ProductPage({Key? key}) : super(key: key);
+
+  @override
+  _ProductPageState createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  Future<List<Product>> fetchProduct() async {
+    var url = Uri.parse('http://127.0.0.1:8000/json/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    // decode the response to JSON
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    // convert the JSON to Product object
+    List<Product> list_product = [];
+    for (var d in data) {
+      if (d != null) {
+        list_product.add(Product.fromJson(d));
+      }
+    }
+    return list_product;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Product'),
+        ),
+        drawer: const LeftDrawer(),
+        body: FutureBuilder(
+            future: fetchProduct(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                if (!snapshot.hasData) {
+                  return const Column(
+                    children: [
+                      Text(
+                        "No product data available.",
+                        style:
+                            TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  );
+                } else {
+                  return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) => Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${snapshot.data![index].fields.name}",
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text("${snapshot.data![index].fields.price}"),
+                                const SizedBox(height: 10),
+                                Text(
+                                    "${snapshot.data![index].fields.description}")
+                              ],
+                            ),
+                          ));
+                }
+              }
+            }));
+  }
+}
+
+```
+
+
+
+
+</details>
